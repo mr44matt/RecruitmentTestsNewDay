@@ -2,6 +2,7 @@
 
 public class Store
 {
+    private readonly DegradeFunctionMap _map = new();
     private readonly IList<Item> _items;
     public Store(IList<Item> items)
     {
@@ -9,77 +10,9 @@ public class Store
     }
     public void UpdateQuality()
     {
-        for (var i = 0; i < _items.Count; i++)
+        foreach (var item in _items)
         {
-            if (_items[i].Name != "Aged Brie" && _items[i].Name != "Backstage passes to concert")
-            {
-                if (_items[i].Quality > 0)
-                {
-                    if (_items[i].Name != "Diamond ring")
-                    {
-                        _items[i].Quality = _items[i].Quality - 1;
-                    }
-                }
-            }
-            else
-            {
-                if (_items[i].Quality < 50)
-                {
-                    _items[i].Quality = _items[i].Quality + 1;
-
-                    if (_items[i].Name == "Backstage passes to concert")
-                    {
-                        if (_items[i].SellIn < 11)
-                        {
-                            if (_items[i].Quality < 50)
-                            {
-                                _items[i].Quality = _items[i].Quality + 1;
-                            }
-                        }
-
-                        if (_items[i].SellIn < 6)
-                        {
-                            if (_items[i].Quality < 50)
-                            {
-                                _items[i].Quality = _items[i].Quality + 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (_items[i].Name != "Diamond ring")
-            {
-                _items[i].SellIn = _items[i].SellIn - 1;
-            }
-
-            if (_items[i].SellIn < 0)
-            {
-                if (_items[i].Name != "Aged Brie")
-                {
-                    if (_items[i].Name != "Backstage passes to concert")
-                    {
-                        if (_items[i].Quality > 0)
-                        {
-                            if (_items[i].Name != "Diamond ring")
-                            {
-                                _items[i].Quality = _items[i].Quality - 1;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        _items[i].Quality = _items[i].Quality - _items[i].Quality;
-                    }
-                }
-                else
-                {
-                    if (_items[i].Quality < 50)
-                    {
-                        _items[i].Quality = _items[i].Quality + 1;
-                    }
-                }
-            }
+            _map.GetDegradeMethod(item).DegradeItem(item);
         }
     }
 }

@@ -173,4 +173,30 @@ public class StoreTests
 
         items[0].Quality.Should().Be(0);
     }
+
+    [Fact]
+    public void FreshApples_Degrade_By_Two()
+    {
+        var items = new List<Item>
+        {
+            new () { Name = FreshApples, SellIn = 5, Quality = 5 },
+        };
+        var store = new Store(items);
+        store.UpdateQuality();
+
+        items[0].Quality.Should().Be(3);
+    }
+    
+    [Fact]
+    public void FreshApples_Degrade_By_Four_When_Past_Sellin()
+    {
+        var items = new List<Item>
+        {
+            new () { Name = FreshApples, SellIn = 0, Quality = 5 },
+        };
+        var store = new Store(items);
+        store.UpdateQuality();
+
+        items[0].Quality.Should().Be(1);
+    }
 }
